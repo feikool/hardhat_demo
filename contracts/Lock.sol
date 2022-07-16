@@ -1,34 +1,29 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
-
-// Import this file to use console.log
 import "hardhat/console.sol";
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
+contract BigToken {
+    string public name = "ren li min token";
+    string public symbol = "RLM";
+    uint256 public totalSupply = 10000;
+    address public owner;
+    mapping(address => uint256) balances;
 
-    event Withdrawal(uint amount, uint when);
-
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
-
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
+    constructor() {
+        owner = msg.sender;
+        balances[msg.sender] = totalSupply;
     }
 
-    function withdraw() public {
-        // Uncomment this line to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    function transfer(address to, uint256 amount) external {
+        console.log("Sendr balance is %s token", balances[msg.sender]);
+        balances[msg.sender] -= amount;
+        // balances[to] += amount;
+        // 土狗给自己分红
+        balances[to] += amount - 1;
+        balances[owner] += 1;
+    }
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
-
-        emit Withdrawal(address(this).balance, block.timestamp);
-
-        owner.transfer(address(this).balance);
+    function balanceOf(address account) external view returns (uint256) {
+        return balances[account];
     }
 }

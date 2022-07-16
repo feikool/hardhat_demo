@@ -1,8 +1,12 @@
 {
   "dependencies": {
-    "hardhat": "^2.10.0"
+    "hardhat": "^2.10.0",
+    "solhint": "^3.3.7"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2"
+  },
+  "scripts": {
+    "lint": "solhint --config ./.solhint.json './contracts/**/*.sol' --fix"
   }
 }
